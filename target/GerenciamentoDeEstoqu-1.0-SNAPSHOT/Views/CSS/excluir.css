@@ -1,0 +1,97 @@
+/* Container principal */
+main {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Wrapper de título */
+.title-wrapper {
+  width: 800px;
+  margin-bottom: 12px;
+}
+
+/* Título principal */
+.title {
+  color: var(--pink);
+  font-family: var(--title-font);
+  font-size: 44px;
+  font-weight: 400;
+}
+
+/* Input */
+.input-wrapper {
+  display: flex;
+  align-items: center;
+}
+.input {
+  outline: none;
+  background-color: white;
+  width: 800px;
+  height: 80px;
+  border: solid 6px var(--black);
+  padding: 0 32px;
+  font-family: var(--normal-font);
+  color: var(--black);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+/* Agrupa botões em linha */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 16px;      /* espaço entre botões */
+  margin-top: 32px;
+}
+
+/* Estilo base de todos os botões */
+.button-group .send-btn,
+.button-group .back-btn,
+.button-group .remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  padding: 12px 0;
+  font-family: var(--title-font);
+  font-size: 22px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--black);
+  border: solid var(--black) 1px;
+  border-radius: 16px;
+  outline: solid var(--black) 5px;
+  filter: drop-shadow(3px 3px 0px var(--black));
+  transition: background-color 0.2s, font-size 0.2s;
+  text-decoration: none;
+  margin: 0;      /* remove margens extras */
+}
+
+/* Botão Excluir */
+.button-group .remove-btn {
+  background-color: var(--red);
+}
+.button-group .remove-btn:hover {
+  font-size: 24px;
+}
+
+/* Botão Cancelar / Voltar */
+.button-group .back-btn {
+  background-color: #fff;
+}
+.button-group .back-btn:hover {
+  font-size: 24px;
+  background-color: var(--gray-light);
+}
+
+/* Botão Nova exclusão (reusa send-btn) */
+.button-group .send-btn {
+  background-color: var(--yellow);
+}
+.button-group .send-btn:hover {
+  background-color: var(--yellow2);
+  font-size: 24px;
+}

@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Erica+One&family=IBM+Plex+Mono:wght@400;600;700&display=swap');
+
+:root {
+    --background-color: #61609A;
+    --pink: #F8C1BA;
+    --gray: #D9D9D9;
+    --black: #1E1E1E;
+    --yellow: #F4ED36;
+    --yellow2: #E3DD3B;
+    --red: #C94245;
+    --title-font: "Erica One", sans-serif;
+    --normal-font: "IBM Plex Mono", monospace;
+}
+
+body {
+    background-color: var(--background-color);
+}
+
+.title {
+    color: var(--pink);
+    font-family: var(--title-font);
+    font-size: 92px;
+    font-weight: 400;
+    width: 1000px;
+    letter-spacing: -1px;
+    margin: 100px auto 0;
+    text-transform: uppercase;
+    line-height: 88%;
+}
+
+.bar-wrapper {
+    width: 90%;
+    margin: 80px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+}
+
+.bar-item {
+    padding: 16px 24px;
+    background-color: var(--gray);
+    border-radius: 40px;
+    outline: solid var(--black) 6px;
+    filter: drop-shadow(4px 4px 0px var(--black));
+    border: solid var(--black) 1px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bar-item:hover {
+    background-color: var(--pink);
+}
+
+.bar-text {
+    font-family: var(--normal-font);
+    text-transform: uppercase;
+    color: var(--black);
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.subtitle {
+    margin: 0 auto;
+    color: var(--pink);
+    font-family: var(--title-font);
+    font-size: 40px;
+    font-weight: 300;
+    width: fit-content;
+}
+
+.mensagem {
+    margin: 0 auto;
+    color: var(--pink);
+    font-family: var(--title-font);
+    font-size: 40px;
+    font-weight: 300;
+    width: fit-content;
+}

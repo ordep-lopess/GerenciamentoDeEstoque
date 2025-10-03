@@ -1,0 +1,13 @@
+CREATE DATABASE banco;
+
+USE banco;
+
+CREATE TABLE produto (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL COMMENT 'Nome do doador',
+  contato VARCHAR(100) NOT NULL COMMENT 'Contato para contatos futuros em caso de estoque baixo',
+  descricao VARCHAR(100) NOT NULL COMMENT 'Nome do alimento doado',
+  marca VARCHAR(50) NOT NULL,
+  quantidade DECIMAL(8,2) NOT NULL COMMENT 'Quantidade em kg de ração',
+  animal ENUM('cao','gato','aves') NOT NULL COMMENT 'Animal destinatário'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

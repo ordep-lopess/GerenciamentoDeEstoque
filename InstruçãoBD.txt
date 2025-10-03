@@ -11,3 +11,5 @@ CREATE TABLE produto (
   quantidade DECIMAL(8,2) NOT NULL COMMENT 'Quantidade em kg de ração',
   animal ENUM('cao','gato','aves') NOT NULL COMMENT 'Animal destinatário'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE usuarios ( id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(100) NOT NULL, email VARCHAR(150) NOT NULL, senha VARCHAR(70) NOT NULL, rua VARCHAR(100), num VARCHAR(20), cep VARCHAR(20) );

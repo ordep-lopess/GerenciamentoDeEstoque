@@ -52,17 +52,17 @@ public class LoginController extends HttpServlet {
             // Login inválido: volta para a tela de login com mensagem de erro
             System.out.println("[LoginController] Login inválido.");
             request.setAttribute("erro", "Email ou senha incorretos.");
-            request.getRequestDispatcher("/Views/login.jsp").forward(request, response);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             request.setAttribute("erro", "Erro de criptografia: " + e.getMessage());
-            request.getRequestDispatcher("/Views/login.jsp").forward(request, response);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("erro", "Ocorreu um erro: " + e.getMessage());
-            request.getRequestDispatcher("/Views/login.jsp").forward(request, response);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
     }
 }

@@ -35,6 +35,5 @@
         </div>
     </main>
     
-    <script src="${pageContext.request.contextPath}/Views/js/menu.js"></script>
 </body>
 </html>

@@ -2,6 +2,12 @@
 <%@ page import="models.Produto" %>
 <%@ page import="dao.ProdutoDAO" %>
 <%@ page import="java.util.List" %>
+<%@ page import="models.Login" %>
+<%
+    // pega o objeto Login da sessão
+    Login usuario = (Login) session.getAttribute("usuario");
+    String nome = (usuario != null) ? usuario.getNome() : "Visitante";
+%>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -12,8 +18,14 @@
   <link rel="stylesheet" href="CSS/index.css"/>
   <link rel="stylesheet" href="CSS/lista.css"/>
   <link rel="stylesheet" href="CSS/voltar.css"/>
+  <link rel="stylesheet" href="CSS/header.css"/>
 </head>
 <body>
+        <!-- cabeçalho de usuário -->
+    <header class="user-header">
+      <span class="greeting">Olá, <%= nome %></span>
+      <a href="<%= request.getContextPath() %>/logout" class="logout-btn">Sair</a>
+    </header>
 <%
   ProdutoDAO dao = new ProdutoDAO();
   // Chama getAllProdutos(), que é o nome do método no seu DAO

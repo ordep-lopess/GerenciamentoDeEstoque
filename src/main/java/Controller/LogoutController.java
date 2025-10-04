@@ -2,7 +2,7 @@ package Controller;
 
 /**
  *
- * @author bianca, pedroGabriel, pedroOliveira, pedroRodrigues
+ * @author bianca, pedroRodrigues
  */
 
 import javax.servlet.ServletException;

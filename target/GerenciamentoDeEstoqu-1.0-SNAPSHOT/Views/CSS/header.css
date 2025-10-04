@@ -1,0 +1,26 @@
+.user-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;    /* empurra para a direita */
+  margin: 24px 20px 12px 0;      /* top, right, bottom, left */
+}
+
+.user-header .greeting {
+  font-size: 1.2rem;             /* um pouco maior */
+  color: #333;
+  margin-right: 20px;            /* mais espaço até o botão */
+}
+
+.logout-btn {
+  font-size: 1rem;               /* texto um pouco maior */
+  color: #c00;
+  text-decoration: none;
+  border: 1px solid #c00;
+  padding: 6px 12px;             /* botão maior */
+  border-radius: 4px;
+}
+
+.logout-btn:hover {
+  background: #c00;
+  color: #fff;
+}

@@ -1,5 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="models.Produto, dao.ProdutoDAO" %>
+<%@ page import="models.Login" %>
+<%
+    // pega o objeto Login da sessão
+    Login usuario = (Login) session.getAttribute("usuario");
+    String nome = (usuario != null) ? usuario.getNome() : "Visitante";
+%>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -10,8 +16,14 @@
   <link rel="stylesheet" href="CSS/index.css"/>
   <link rel="stylesheet" href="CSS/cadastro.css"/>
   <link rel="stylesheet" href="CSS/voltar.css"/>
+  <link rel="stylesheet" href="CSS/header.css"/>
 </head>
 <body>
+        <!-- cabeçalho de usuário -->
+    <header class="user-header">
+      <span class="greeting">Olá, <%= nome %></span>
+      <a href="<%= request.getContextPath() %>/logout" class="logout-btn">Sair</a>
+    </header>
 <%
     boolean isPost = "POST".equalsIgnoreCase(request.getMethod());
     String mensagem = "";
@@ -99,7 +111,7 @@
     <div class="mensagem">
       <p><%= mensagem %></p>
       <div class="button-group">
-        <button type="button" class="back-btn" onclick="history.back()">← Voltar</button>
+        <a href="inicio.jsp" class="back-btn">← Início</a>
         <a href="cadastroProd.jsp" class="send-btn">Nova Doação</a>
       </div>
     </div>

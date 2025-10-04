@@ -1,6 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="models.Produto" %>
 <%@ page import="dao.ProdutoDAO" %>
+<%@ page import="models.Login" %>
+<%
+    // pega o objeto Login da sessão
+    Login usuario = (Login) session.getAttribute("usuario");
+    String nome = (usuario != null) ? usuario.getNome() : "Visitante";
+%>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -11,8 +17,14 @@
   <link rel="stylesheet" href="CSS/index.css"/>
   <link rel="stylesheet" href="CSS/consulta.css"/>
   <link rel="stylesheet" href="CSS/voltar.css"/>
+  <link rel="stylesheet" href="CSS/header.css"/>
 </head>
 <body>
+        <!-- cabeçalho de usuário -->
+    <header class="user-header">
+      <span class="greeting">Olá, <%= nome %></span>
+      <a href="<%= request.getContextPath() %>/logout" class="logout-btn">Sair</a>
+    </header>
 <%
   // Parâmetro 'id' pode vir via GET ou POST
   String ident = request.getParameter("id");

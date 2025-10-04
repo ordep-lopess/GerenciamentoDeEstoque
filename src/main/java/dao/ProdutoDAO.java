@@ -13,11 +13,6 @@ import java.util.List;
  */
 public class ProdutoDAO {
 
-    /**
-     * Insere uma nova doação na tabela e preenche o ID gerado em produto.id.
-     * @param produto Objeto contendo nome, contato, descrição, marca, quantidade e animal.
-     * @return true se inseriu com sucesso, false caso contrário.
-     */
     public boolean insProduto(Produto produto) {
     String sql =
         "INSERT INTO produto(nome, contato, descricao, marca, quantidade, animal) " +

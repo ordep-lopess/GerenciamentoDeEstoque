@@ -8,7 +8,7 @@ public class UsuarioDAO {
     // Cria a conexão com o MySQL
     private Connection getConnection() throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        String url = "jdbc:mysql://localhost:3306/banco?useSSL=false&serverTimezone=UTC";
+        String url = "jdbc:mysql://localhost:3306/bancoo?useSSL=false&serverTimezone=UTC";
         return DriverManager.getConnection(url, "root", "");
     }
 

@@ -16,7 +16,7 @@ public class ConectaDB {
         Connection conexao = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/banco", "root", "");
+            conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/bancoo", "root", "");
             return conexao;
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);

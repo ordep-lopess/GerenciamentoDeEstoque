@@ -27,7 +27,7 @@ Desenvolvido em Java e JSP, este sistema adota o padrão MVC sem recorrer a fram
 
 CREATE DATABASE bancoo;
 
-USE banco;
+USE bancoo;
 
 CREATE TABLE produto (
   id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

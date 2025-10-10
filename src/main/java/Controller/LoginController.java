@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Controller;
 
 import models.Login;
@@ -9,6 +13,10 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ *
+ * @author pedroH, bianca
+ */
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
     private static final long serialVersionUID = 1L;

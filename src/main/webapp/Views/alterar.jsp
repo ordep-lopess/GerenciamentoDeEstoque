@@ -2,8 +2,8 @@
 <%@ page import="models.Login" %>
 <%@ page import="models.Produto" %>
 <%@ page import="dao.ProdutoDAO" %>
+<%@ page import="java.time.LocalDate" %>
 <%
-    // Recupera o usuário e prepara a saudação
     Login usuario = (Login) session.getAttribute("usuario");
     String nomeUsuario = (usuario != null) ? usuario.getNome() : "Visitante";
 
@@ -15,22 +15,30 @@
     if (isPost) {
         // POST: atualiza a doação
         try {
-            int    id         = Integer.parseInt(idParam);
-            String nomeProd   = request.getParameter("nome").trim();
-            String contato    = request.getParameter("contato").trim();
-            String descricao  = request.getParameter("descricao").trim();
-            String marca      = request.getParameter("marca").trim();
-            double quantidade = Double.parseDouble(request.getParameter("quantidade"));
-            String animal     = request.getParameter("animal");
+            int      id            = Integer.parseInt(idParam);
+            String   nomeDoador    = request.getParameter("nomeDoador").trim();
+            String   telefone      = request.getParameter("telefone").trim();
+            String   email         = request.getParameter("email").trim();
+            String   descricao     = request.getParameter("descricao").trim();
+            String   marca         = request.getParameter("marca").trim();
+            double   quantidade    = Double.parseDouble(request.getParameter("quantidade"));
+            String   animal        = request.getParameter("animal");
+            String   tipo          = request.getParameter("tipo").trim();
+            String   pacoteFechado = request.getParameter("pacoteFechado");
+            LocalDate dataDoacao   = LocalDate.parse(request.getParameter("dataDoacao"));
 
             Produto toUpdate = new Produto();
             toUpdate.setId(id);
-            toUpdate.setNome(nomeProd);
-            toUpdate.setContato(contato);
+            toUpdate.setNomeDoador(nomeDoador);
+            toUpdate.setTelefone(telefone);
+            toUpdate.setEmail(email);
             toUpdate.setDescricao(descricao);
             toUpdate.setMarca(marca);
             toUpdate.setQuantidade(quantidade);
             toUpdate.setAnimal(animal);
+            toUpdate.setTipo(tipo);
+            toUpdate.setPacoteFechado(pacoteFechado);
+            toUpdate.setDataDoacao(dataDoacao);
 
             boolean ok = new ProdutoDAO().updateProduto(toUpdate);
             mensagem = ok
@@ -119,19 +127,30 @@
         <div class="input-wrapper">
           <input
             type="text"
-            name="nome"
-            value="<%= produto.getNome() %>"
+            name="nomeDoador"
+            value="<%= produto.getNomeDoador() %>"
             class="input"
             required
           />
         </div>
 
-        <div class="title-wrapper margin-top"><h2 class="title-label">Contato</h2></div>
+        <div class="title-wrapper margin-top"><h2 class="title-label">Telefone</h2></div>
         <div class="input-wrapper">
           <input
-            type="text"
-            name="contato"
-            value="<%= produto.getContato() %>"
+            type="tel"
+            name="telefone"
+            value="<%= produto.getTelefone() %>"
+            class="input"
+            required
+          />
+        </div>
+
+        <div class="title-wrapper margin-top"><h2 class="title-label">Email</h2></div>
+        <div class="input-wrapper">
+          <input
+            type="email"
+            name="email"
+            value="<%= produto.getEmail() %>"
             class="input"
             required
           />
@@ -181,6 +200,36 @@
             <option value="aves" <%= "aves".equals(produto.getAnimal()) ? "selected" : "" %>>Aves</option>
           </select>
         </div>
+            
+        <div class="title-wrapper margin-top"><h2 class="title-label">Tipo</h2></div>
+        <div class="input-wrapper">
+          <select name="tipo" class="input" required>
+            <option value="">Selecione…</option>
+            <option value="racao"  <%= "racao".equals(produto.getTipo())  ? "selected" : "" %>>Ração</option>
+            <option value="petisco" <%= "petisco".equals(produto.getTipo()) ? "selected" : "" %>>Petisco</option>
+            <option value="graos" <%= "graos".equals(produto.getTipo()) ? "selected" : "" %>>Grãos</option>
+          </select>
+        </div>         
+
+        <div class="title-wrapper margin-top"><h2 class="title-label">Pacote Fechado</h2></div>
+        <div class="input-wrapper">
+          <select name="pacoteFechado" class="input" required>
+            <option value="">Selecione…</option>
+            <option value="sim"  <%= "sim".equals(produto.getPacoteFechado())  ? "selected" : "" %>>Sim</option>
+            <option value="nao" <%= "nao".equals(produto.getPacoteFechado()) ? "selected" : "" %>>Não</option>
+          </select>
+        </div>
+
+        <div class="title-wrapper margin-top"><h2 class="title-label">Data da Doação</h2></div>
+        <div class="input-wrapper">
+          <input
+            type="date"
+            name="dataDoacao"
+            value="<%= produto.getDataDoacao() %>"
+            class="input"
+            required
+          />
+        </div>
 
         <div class="button-group">
           <button type="button" class="back-btn" onclick="history.back()">← Voltar</button>
@@ -192,4 +241,3 @@
   </main>
 </body>
 </html>
-```

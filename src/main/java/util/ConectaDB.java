@@ -8,7 +8,7 @@ import java.sql.*;
 
 /**
  *
- * @author pedroH, BiancaB
+ * @author pedroH, bianca
  */
 public class ConectaDB {
 

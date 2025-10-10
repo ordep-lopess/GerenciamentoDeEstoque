@@ -37,12 +37,12 @@ main {
     font-size: 20px;
 }
 
-/* Agrupa botões em linha */
+
 .button-group {
   display: flex;
-  justify-content: center; /* ou flex-start, conforme alinhamento */
-  gap: 16px;               /* espaço entre eles */
-  margin-top: 32px;        /* posicionamento vertical */
+  justify-content: center;
+  gap: 16px;
+  margin: 1rem;
 }
 
 /* Remove margens extras dos botões internos */

@@ -36,11 +36,11 @@ main {
     font-size: 20px;
 }
 
-/* para agrupar botões em linha */
 .button-group {
   display: flex;
+  justify-content: center;
   gap: 16px;
-  align-items: center;
+  margin: 1rem;
 }
 
 /* remove margens extras nos itens do grupo */

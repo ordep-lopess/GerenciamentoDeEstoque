@@ -39,12 +39,11 @@ main {
   font-size: 20px;
 }
 
-/* Agrupa botões em linha */
 .button-group {
   display: flex;
   justify-content: center;
-  gap: 16px;      /* espaço entre botões */
-  margin-top: 32px;
+  gap: 16px;
+  margin: 2rem;
 }
 
 /* Estilo base de todos os botões */
@@ -61,7 +60,7 @@ main {
   font-weight: 400;
   text-transform: uppercase;
   color: var(--black);
-  border: solid var(--black) 1px;
+  border: solid var(--black);
   border-radius: 16px;
   outline: solid var(--black) 5px;
   filter: drop-shadow(3px 3px 0px var(--black));

@@ -4,14 +4,17 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Soft Paper</title>
+  <title>Cadastro de Usuário</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/reset.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/index.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/voltar.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/cadastro.css">
 </head>
 <body class="bodyp">
+  
   <main class="main-cadastro">
+    <h1 class="title-login">empatinha ong</h1>
     <div class="cadastrocard flex">
       <h2>Crie sua conta!</h2>
       <form id="cadastroForm" action="${pageContext.request.contextPath}/cadastro" method="post" class="cadastro-form">

@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Controller;
 
 import models.Login;
@@ -12,6 +16,11 @@ import java.security.*;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
+
+/**
+ *
+ * @author pedroH, bianca
+ */
 
 @WebServlet("/cadastro")
 public class CadastroController extends HttpServlet {

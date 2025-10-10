@@ -28,6 +28,28 @@ body {
     line-height: 88%;
 }
 
+.title-login {
+    color: var(--pink);
+    font-family: var(--title-font);
+    font-size: 92px;
+    font-weight: 400;
+    width: 1000px;
+    letter-spacing: -1px;
+    margin: 8rem;
+    margin-bottom: -10rem;
+    text-transform: uppercase;
+    padding-left: 13rem;
+}
+
+.greeting{
+    font-family: var(--normal-font);
+    text-transform: uppercase;
+    color: black;
+    font-weight: 700;
+    font-size: 20px;
+    margin: 3rem;
+}
+
 .bar-wrapper {
     width: 90%;
     margin: 80px auto;

@@ -4,12 +4,19 @@ USE banco;
 
 CREATE TABLE produto (
   id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  nome VARCHAR(100) NOT NULL COMMENT 'Nome do doador',
-  contato VARCHAR(100) NOT NULL COMMENT 'Contato para contatos futuros em caso de estoque baixo',
-  descricao VARCHAR(100) NOT NULL COMMENT 'Nome do alimento doado',
-  marca VARCHAR(50) NOT NULL,
-  quantidade DECIMAL(8,2) NOT NULL COMMENT 'Quantidade em kg de ração',
-  animal ENUM('cao','gato','aves') NOT NULL COMMENT 'Animal destinatário'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  nome_doador VARCHAR(100) NOT NULL COMMENT 'Nome do doador',
+  telefone VARCHAR(20) NOT NULL COMMENT 'Telefone do doador',
+  email VARCHAR(100) NOT NULL COMMENT 'E-mail do doador',
+  descricao VARCHAR(100) NOT NULL COMMENT 'Descrição do alimento doado',
+  marca VARCHAR(50) NOT NULL COMMENT 'Marca do produto',
+  quantidade DECIMAL(8,2) NOT NULL COMMENT 'Quantidade doada (kg)',
+  animal ENUM('cao','gato','aves') NOT NULL COMMENT 'Animal destinatário',
+  tipo ENUM('racao','petisco', 'graos') NOT NULL COMMENT 'Tipo de alimento doado',
+  pacote_fechado ENUM('sim','nao') NOT NULL COMMENT 'Pacote está fechado?',
+  data_doacao DATE NOT NULL COMMENT 'Data da doação'
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE usuarios ( id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(100) NOT NULL, email VARCHAR(150) NOT NULL, senha VARCHAR(70) NOT NULL, rua VARCHAR(100), num VARCHAR(20), cep VARCHAR(20) );

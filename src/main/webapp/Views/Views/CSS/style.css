@@ -1,0 +1,292 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Erica+One&family=IBM+Plex+Mono:wght@400;600;700&display=swap');
+
+html{
+    font-size: 62.5%;
+}
+
+:root{
+/** fontes */
+--body-font: "IBM Plex Mono", monospace;
+--title-font: "Erica One", sans-serif;
+--normal-font: "IBM Plex Mono", monospace;
+--big-font: 4rem;
+--h1-font: 3.6rem;
+--h2-font: 2.4rem;
+--h3-font: 2rem;
+--h4-font: 1.8rem;
+--normal-font: 1.6rem;
+--small-font: 1.4rem;
+--x-small-font: 1.3rem;
+
+/** negrito */
+--font-regular: 400;
+--font-medium: 500;
+--font-bold: 600;
+
+/** cores */
+--primary-color: #61609A;
+--primary-color-hover: #460000;
+--primary-color-light: rgba(118, 0, 0, 0.053);
+--text-color: #333;
+--text-color-light: #888682;
+--border-color: #484848;
+--white-color: #fff;
+--section-bg: #2c3034;
+--pink: #F8C1BA;
+--gray: #D9D9D9;
+--black: #1E1E1E;
+--yellow: #F4ED36;
+--yellow2: #E3DD3B;
+--red: #C94245;
+    
+/** z */
+--z-overlay: 10;
+--z-fixed: 100;
+
+/* transição */
+--tran-02: 0.2s;
+--tran-03: 0.3s;
+--tran-05: 0.5s;
+}
+
+/** tamanho */
+@media screen and (max-width: 990px) {
+    :root {
+        --big-font: 3.5rem;
+        --h1-font: 2.4rem;
+        --h2-font: 2rem;
+        --h3-font: 1.8rem;
+        --h4-font: 1.6rem;
+        --normal-font: 1.5rem;
+        --small-font: 1.3rem;
+        --x-small-font: 1.2rem;
+    }  
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--body-font);
+    color: var(--text-color);
+}
+
+body,
+button,
+input{
+    font-family: var(--body-font);
+    font-size: var(--normal-font);
+    font-weight: var(--font-regular);
+    color: var(--text-color);
+}
+
+body{
+    background-color: var(--background-color);
+    overflow-x: hidden;
+}
+.bodyc{
+    margin-top: 7rem;
+}
+.bodyl{
+    margin-top: 4rem;
+}
+.bodyp{
+
+}
+ul{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+}
+img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.section{
+    padding: 7rem 2rem;
+    position: relative;
+}
+
+.container{
+    max-width: 1030px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 3rem;
+}
+.flex{
+    display: flex;
+    align-items: center;
+    column-gap: 0.6rem;
+}
+.btn{
+    border: none;
+    outline: none;
+    color: var(--white-color);
+    padding: 1.4rem 4rem;
+    border-radius: 3rem;
+    background-color: var(--primary-color);
+    transition: var(--tran-03);
+    cursor: pointer;
+}
+.btn:hover{
+    background-color: var(--primary-color-hover);
+}
+
+.main-login{
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+    background-color: rgb(95, 94, 94);
+    background-image: url('../img/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-y: auto;
+}
+.logincard {
+    width: 400px;
+    height: 400px;
+    padding: 2rem;
+    border-radius: 60px;
+    border: 2px solid var(--white-color);
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    margin: auto;
+}
+.logincard h4, .logincard h2, .logincard a, .logincard p{
+    color: var(--white-color);
+    width: 30rem;
+}
+.logincard h4{
+    font-weight: var(--normal-font);
+}
+.logincard input{
+    width: 30rem;
+    padding: 7px;
+    margin: 5px 0;
+    border: 1px solid var(--white-color);
+    border-radius: 5px;
+}
+.login-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login-form button{
+    padding: 10px;
+    background: var(--white-color);
+    border: none;
+    color: var(--text-color);
+    border-radius: 5px;
+    cursor: pointer;
+}
+.login-form button:hover{
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.main-cadastro {
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(95, 94, 94);
+    background-image: url('../img/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-y: auto; 
+}
+
+.cadastrocard {
+    width: 90%;
+    max-width: 350px;
+    padding: 1.5rem;
+    border-radius: 60px;
+    border: 2px solid var(--white-color);
+    background-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    margin: auto; 
+}
+
+.cadastrocard h4, .cadastrocard h2, .cadastrocard a, .cadastrocard label {
+    color: var(--white-color);
+    width: 90%;
+    max-width: 30rem;
+}
+
+.cadastrocard h4 {
+    font-weight: var(--normal-font);
+}
+
+.cadastrocard .input-normal,
+.cadastrocard .input-medio,
+.cadastrocard .input-pequeno {
+    width: 100%;
+    padding: 5px;
+    margin: 3px 0;
+    border: 1px solid var(--white-color);
+    border-radius: 5px;
+}
+
+.cadastro-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    width: 80%;
+    max-width: 350px;
+}
+
+.cadastro-form button {
+    padding: 8px;
+    width: 80%;
+    border-radius: 5px;
+    background: var(--white-color);
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.cadastro-form button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 600px) {
+    .cadastro-form {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    .cadastrocard {
+        max-width: 300px;
+        padding: 1rem;
+        margin-top: 4rem; 
+    }
+}
+
+#passwordCriteria {
+    display: none;      
+    font-size: 0.9em;    
+    margin-bottom: 10px;
+}
+

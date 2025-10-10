@@ -1,35 +1,48 @@
 package models;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Produto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
-    private String nome;
-    private String contato;
+    private String nomeDoador;
+    private String telefone;
+    private String email;
     private String descricao;
     private String marca;
     private double quantidade;
     private String animal;
+    private String tipo;
+    private String pacoteFechado;
+    private LocalDate dataDoacao;
 
     public Produto() { }
 
     public Produto(int id,
-                   String nome,
-                   String contato,
+                   String nomeDoador,
+                   String telefone,
+                   String email,
                    String descricao,
                    String marca,
                    double quantidade,
-                   String animal) {
-        this.id         = id;
-        this.nome       = nome;
-        this.contato    = contato;
-        this.descricao  = descricao;
-        this.marca      = marca;
+                   String animal,
+                   String tipo,
+                   String pacoteFechado,
+                   LocalDate dataDoacao) {
+        this.id = id;
+        this.nomeDoador = nomeDoador;
+        this.telefone = telefone;
+        this.email = email;
+        this.descricao = descricao;
+        this.marca = marca;
         this.quantidade = quantidade;
-        this.animal     = animal;
+        this.animal = animal;
+        this.tipo = tipo;
+        this.pacoteFechado = pacoteFechado;
+        this.dataDoacao = dataDoacao;
     }
 
     public int getId() {
@@ -40,20 +53,28 @@ public class Produto implements Serializable {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeDoador() {
+        return nomeDoador;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeDoador(String nomeDoador) {
+        this.nomeDoador = nomeDoador;
     }
 
-    public String getContato() {
-        return contato;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setContato(String contato) {
-        this.contato = contato;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getDescricao() {
@@ -88,16 +109,44 @@ public class Produto implements Serializable {
         this.animal = animal;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getPacoteFechado() {
+        return pacoteFechado;
+    }
+
+    public void setPacoteFechado(String pacoteFechado) {
+        this.pacoteFechado = pacoteFechado;
+    }
+
+    public LocalDate getDataDoacao() {
+        return dataDoacao;
+    }
+
+    public void setDataDoacao(LocalDate dataDoacao) {
+        this.dataDoacao = dataDoacao;
+    }
+
     @Override
     public String toString() {
         return "Produto{" +
                "id=" + id +
-               ", nome='" + nome + '\'' +
-               ", contato='" + contato + '\'' +
+               ", nomeDoador='" + nomeDoador + '\'' +
+               ", telefone='" + telefone + '\'' +
+               ", email='" + email + '\'' +
                ", descricao='" + descricao + '\'' +
                ", marca='" + marca + '\'' +
                ", quantidade=" + quantidade +
                ", animal='" + animal + '\'' +
+               ", tipo='" + tipo + '\'' +
+               ", pacoteFechado='" + pacoteFechado + '\'' +
+               ", dataDoacao=" + dataDoacao +
                '}';
     }
 

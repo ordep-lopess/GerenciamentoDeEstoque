@@ -14,7 +14,7 @@
 <body class="bodyp">
   
   <main class="main-cadastro">
-    <h1 class="title-login">empatinha ong</h1>
+    <h1 class="title-cadastro">empatinha ong</h1>
     <div class="cadastrocard flex">
       <h2>Crie sua conta!</h2>
       <form id="cadastroForm" action="${pageContext.request.contextPath}/cadastro" method="post" class="cadastro-form">
@@ -55,15 +55,12 @@
         
         <label>CEP:</label>
         <input type="number" name="cep" class="input-normal" required>
-        <br>
         <button type="submit" class="form">Cadastrar</button>
       </form>
       <h4>Já tem uma conta? <a href="../index.jsp" style="text-decoration: underline;">Faça o login.</a></h4>
     </div>
   </main>
   
-  
-  <script src="${pageContext.request.contextPath}/Views/js/menu.js"></script>
-  <script src="js/outros.js"></script>
+    <script src="js/outros.js"></script>
 </body>
 </html>

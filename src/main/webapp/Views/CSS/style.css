@@ -199,7 +199,7 @@ img{
 
 .main-cadastro {
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -209,11 +209,12 @@ img{
     background-position: center;
     background-repeat: no-repeat;
     overflow-y: auto; 
+    margin: 0;
 }
 
 .cadastrocard {
-    width: 90%;
-    max-width: 350px;
+    width: 70%;
+    max-width: 350px;  
     padding: 1.5rem;
     border-radius: 60px;
     border: 2px solid var(--white-color);
@@ -223,8 +224,9 @@ img{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2rem;
+    gap: 0.5rem;
     margin: auto; 
+    margin-bottom: 2rem;
 }
 
 .cadastrocard h4, .cadastrocard h2, .cadastrocard a, .cadastrocard label {
@@ -240,8 +242,8 @@ img{
 .cadastrocard .input-normal,
 .cadastrocard .input-medio,
 .cadastrocard .input-pequeno {
-    width: 100%;
-    padding: 5px;
+    width: 80%;
+    padding: 2px;
     margin: 3px 0;
     border: 1px solid var(--white-color);
     border-radius: 5px;
@@ -264,6 +266,7 @@ img{
     border: none;
     color: var(--text-color);
     cursor: pointer;
+    margin-top: 1rem;
 }
 
 .cadastro-form button:hover {

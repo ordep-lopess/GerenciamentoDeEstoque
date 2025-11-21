@@ -2,6 +2,7 @@
 
 :root {
     --background-color: #61609A;
+    --background-color-light: #ccccde;
     --pink: #F8C1BA;
     --gray: #D9D9D9;
     --black: #1E1E1E;
@@ -16,6 +17,10 @@ body {
     background-color: var(--background-color);
 }
 
+.p-lista{
+    font-family: var(--normal-font);
+    margin: 2rem;
+}
 .title {
     color: var(--pink);
     font-family: var(--title-font);
@@ -35,8 +40,21 @@ body {
     font-weight: 400;
     width: 1000px;
     letter-spacing: -1px;
-    margin: 8rem;
+    margin: 3rem;
     margin-bottom: -10rem;
+    text-transform: uppercase;
+    padding-left: 13rem;
+}
+
+.title-cadastro {
+    color: var(--pink);
+    font-family: var(--title-font);
+    font-size: 92px;
+    font-weight: 400;
+    width: 1000px;
+    letter-spacing: -1px;
+    margin: 3rem;
+    margin-bottom: -0.2rem;
     text-transform: uppercase;
     padding-left: 13rem;
 }

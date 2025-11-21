@@ -25,6 +25,10 @@
 
 table, td {
     outline: 3px solid var(--black);
+    font-family: var(--normal-font);
+    background-color: var(--background-color-light);
+    padding: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .table-body {

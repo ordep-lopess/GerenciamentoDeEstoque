@@ -1,20 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import models.Produto;
 import util.ConectaDB;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author pedroH, bianca
- */
 public class ProdutoDAO {
 
     public boolean insProduto(Produto produto) {
@@ -35,8 +28,12 @@ public class ProdutoDAO {
             ps.setString(7, produto.getAnimal());
             ps.setString(8, produto.getTipo());
             ps.setString(9, produto.getPacoteFechado());
-            // assumindo que Produto.getDataDoacao() retorna java.time.LocalDate
-            ps.setDate(10, Date.valueOf(produto.getDataDoacao()));
+            // aceita null para dataDoacao
+            if (produto.getDataDoacao() != null) {
+                ps.setDate(10, Date.valueOf(produto.getDataDoacao()));
+            } else {
+                ps.setNull(10, Types.DATE);
+            }
 
             int affected = ps.executeUpdate();
             if (affected == 0) {
@@ -55,9 +52,6 @@ public class ProdutoDAO {
         }
     }
 
-    /**
-     * Busca uma doação pelo seu ID, retornando todos os campos.
-     */
     public Produto getProdutoById(int id) {
         String sql = "SELECT * FROM produto WHERE id = ?";
         try (Connection conn = ConectaDB.conectar();
@@ -66,21 +60,7 @@ public class ProdutoDAO {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Produto p = new Produto();
-                    p.setId(rs.getInt("id"));
-                    p.setNomeDoador(rs.getString("nome_doador"));
-                    p.setTelefone(rs.getString("telefone"));
-                    p.setEmail(rs.getString("email"));
-                    p.setDescricao(rs.getString("descricao"));
-                    p.setMarca(rs.getString("marca"));
-                    p.setQuantidade(rs.getDouble("quantidade"));
-                    p.setAnimal(rs.getString("animal"));
-                    p.setTipo(rs.getString("tipo"));
-                    p.setPacoteFechado(rs.getString("pacote_fechado"));
-                    // converte java.sql.Date para java.time.LocalDate
-                    Date dt = rs.getDate("data_doacao");
-                    p.setDataDoacao(dt.toLocalDate());
-                    return p;
+                    return mapResultSetToProduto(rs);
                 }
             }
 
@@ -90,43 +70,6 @@ public class ProdutoDAO {
         return null;
     }
 
-    /**
-     * Busca uma doação pelo nome do doador.
-     */
-    public Produto getProdutoByNome(String nome) {
-        String sql = "SELECT * FROM produto WHERE nome_doador = ?";
-        try (Connection conn = ConectaDB.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, nome);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Produto p = new Produto();
-                    p.setId(rs.getInt("id"));
-                    p.setNomeDoador(rs.getString("nome_doador"));
-                    p.setTelefone(rs.getString("telefone"));
-                    p.setEmail(rs.getString("email"));
-                    p.setDescricao(rs.getString("descricao"));
-                    p.setMarca(rs.getString("marca"));
-                    p.setQuantidade(rs.getDouble("quantidade"));
-                    p.setAnimal(rs.getString("animal"));
-                    p.setTipo(rs.getString("tipo"));
-                    p.setPacoteFechado(rs.getString("pacote_fechado"));
-                    Date dt = rs.getDate("data_doacao");
-                    p.setDataDoacao(dt.toLocalDate());
-                    return p;
-                }
-            }
-
-        } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * Lista todas as doações cadastradas, com todos os atributos.
-     */
     public List<Produto> getAllProdutos() {
         String sql = "SELECT * FROM produto ORDER BY id";
         List<Produto> lista = new ArrayList<>();
@@ -135,20 +78,7 @@ public class ProdutoDAO {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Produto p = new Produto();
-                p.setId(rs.getInt("id"));
-                p.setNomeDoador(rs.getString("nome_doador"));
-                p.setTelefone(rs.getString("telefone"));
-                p.setEmail(rs.getString("email"));
-                p.setDescricao(rs.getString("descricao"));
-                p.setMarca(rs.getString("marca"));
-                p.setQuantidade(rs.getDouble("quantidade"));
-                p.setAnimal(rs.getString("animal"));
-                p.setTipo(rs.getString("tipo"));
-                p.setPacoteFechado(rs.getString("pacote_fechado"));
-                Date dt = rs.getDate("data_doacao");
-                p.setDataDoacao(dt.toLocalDate());
-                lista.add(p);
+                lista.add(mapResultSetToProduto(rs));
             }
 
         } catch (SQLException | ClassNotFoundException ex) {
@@ -157,9 +87,6 @@ public class ProdutoDAO {
         return lista;
     }
 
-    /**
-     * Atualiza os dados de uma doação existente.
-     */
     public boolean updateProduto(Produto produto) {
         String sql = ""
             + "UPDATE produto SET "
@@ -178,7 +105,13 @@ public class ProdutoDAO {
             ps.setString(7, produto.getAnimal());
             ps.setString(8, produto.getTipo());
             ps.setString(9, produto.getPacoteFechado());
-            ps.setDate(10, Date.valueOf(produto.getDataDoacao()));
+
+            if (produto.getDataDoacao() != null) {
+                ps.setDate(10, Date.valueOf(produto.getDataDoacao()));
+            } else {
+                ps.setNull(10, Types.DATE);
+            }
+
             ps.setInt(11, produto.getId());
 
             return ps.executeUpdate() == 1;
@@ -189,9 +122,6 @@ public class ProdutoDAO {
         }
     }
 
-    /**
-     * Exclui uma doação pelo ID.
-     */
     public boolean deleteProduto(int id) {
         String sql = "DELETE FROM produto WHERE id = ?";
         try (Connection conn = ConectaDB.conectar();
@@ -204,5 +134,49 @@ public class ProdutoDAO {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * Ajusta a quantidade do produto somando delta (positivo para entrada, negativo para saída).
+     * Retorna true se atualização ocorreu com sucesso.
+     */
+    public boolean adjustQuantidadeById(int id, double delta) {
+        // Atualiza em uma única query para evitar condições de corrida simples
+        String sql = "UPDATE produto SET quantidade = quantidade + ? WHERE id = ?";
+        try (Connection conn = ConectaDB.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setDouble(1, delta);
+            ps.setInt(2, id);
+            return ps.executeUpdate() == 1;
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Mapear ResultSet para objeto Produto (centraliza conversões e evita duplicação).
+     */
+    private Produto mapResultSetToProduto(ResultSet rs) throws SQLException {
+        Produto p = new Produto();
+        p.setId(rs.getInt("id"));
+        p.setNomeDoador(rs.getString("nome_doador"));
+        p.setTelefone(rs.getString("telefone"));
+        p.setEmail(rs.getString("email"));
+        p.setDescricao(rs.getString("descricao"));
+        p.setMarca(rs.getString("marca"));
+        p.setQuantidade(rs.getDouble("quantidade"));
+        p.setAnimal(rs.getString("animal"));
+        p.setTipo(rs.getString("tipo"));
+        p.setPacoteFechado(rs.getString("pacote_fechado"));
+        Date dt = rs.getDate("data_doacao");
+        if (dt != null) {
+            p.setDataDoacao(dt.toLocalDate());
+        } else {
+            p.setDataDoacao(null);
+        }
+        return p;
     }
 }

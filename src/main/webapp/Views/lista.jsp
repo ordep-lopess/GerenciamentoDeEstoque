@@ -1,88 +1,92 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="models.Produto, dao.ProdutoDAO, models.Login, java.util.List" %>
-<%
-    // Recupera usuário da sessão
-    Login usuario = (Login) session.getAttribute("usuario");
-    String nomeUsuario = (usuario != null) ? usuario.getNome() : "Visitante";
-
-    // Busca lista de produtos
-    ProdutoDAO dao = new ProdutoDAO();
-    List<Produto> produtos = dao.getAllProdutos();
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="models.Login" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8"/>
   <title>Lista de Doações</title>
-  <link rel="stylesheet" href="CSS/reset.css"/>
-  <link rel="stylesheet" href="CSS/index.css"/>
-  <link rel="stylesheet" href="CSS/lista.css"/>
-  <link rel="stylesheet" href="CSS/voltar.css"/>
-  <link rel="stylesheet" href="CSS/header.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/reset.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/index.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/lista.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/voltar.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/header.css"/>
 </head>
 <body>
-  <header class="user-header">
-    <span class="greeting">Olá, <%= nomeUsuario %></span>
-    <a href="<%= request.getContextPath() %>/logout" class="logout-btn">Sair</a>
-  </header>
+
+<%
+    Login usuario = (Login) session.getAttribute("usuario");
+    String nome = (usuario != null && usuario.getNome() != null) ? usuario.getNome() : "Visitante";
+%>
+
+<header class="user-header">
+  <span class="greeting">Olá, <%= nome %></span>
+  <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Sair</a>
+</header>
 
   <h1 class="title" style="margin-bottom:32px">Lista de Doações</h1>
 
   <main class="main">
-    <% if (produtos != null && !produtos.isEmpty()) { %>
-      <table class="table">
-        <colgroup>
-          <col style="width:  5%"/>  <!-- ID -->
-          <col style="width: 15%"/>  <!-- Nome -->
-          <col style="width: 12%"/>  <!-- Telefone -->
-          <col style="width: 12%"/>  <!-- E-mail -->
-          <col style="width: 18%"/>  <!-- Descrição -->
-          <col style="width: 10%"/>  <!-- Marca -->
-          <col style="width:  8%"/>  <!-- Quantidade(kg) -->
-          <col style="width:  8%"/>  <!-- Animal -->
-          <col style="width:  8%"/>  <!-- Tipo -->
-          <col style="width:  8%"/>  <!-- Pacote Fechado -->
-          <col style="width:  9%"/>  <!-- Data da Doação -->
-        </colgroup>
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Telefone</th>
-            <th scope="col">E-mail</th>
-            <th scope="col">Descrição</th>
-            <th scope="col">Marca</th>
-            <th scope="col">Quantidade (kg)</th>
-            <th scope="col">Animal</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Pacote Fechado?</th>
-            <th scope="col">Data da Doação</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% for (Produto p : produtos) { %>
+    <c:choose>
+      <c:when test="${not empty produtos}">
+        <table class="table">
+          <colgroup>
+            <col style="width:  5%"/>
+            <col style="width: 15%"/>
+            <col style="width: 12%"/>
+            <col style="width: 12%"/>
+            <col style="width: 18%"/>
+            <col style="width: 10%"/>
+            <col style="width:  8%"/>
+            <col style="width:  8%"/>
+            <col style="width:  8%"/>
+            <col style="width:  8%"/>
+            <col style="width:  9%"/>
+          </colgroup>
+          <thead>
             <tr>
-              <th scope="row"><%= p.getId() %></th>
-              <td><%= p.getNomeDoador() %></td>
-              <td><%= p.getTelefone() %></td>
-              <td><%= p.getEmail() %></td>
-              <td><%= p.getDescricao() %></td>
-              <td><%= p.getMarca() %></td>
-              <td><%= p.getQuantidade() %></td>
-              <td><%= p.getAnimal() %></td>
-              <td><%= p.getTipo() %></td>
-              <td><%= p.getPacoteFechado() %></td>
-              <td><%= p.getDataDoacao() %></td>
+              <th scope="col">ID</th>
+              <th scope="col">Nome Doador</th>
+              <th scope="col">Telefone</th>
+              <th scope="col">E-mail</th>
+              <th scope="col">Produto</th>
+              <th scope="col">Marca</th>
+              <th scope="col">Quantidade (kg)</th>
+              <th scope="col">Animal</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Pacote Fechado?</th>
+              <th scope="col">Data da Doação</th>
             </tr>
-          <% } %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <c:forEach var="p" items="${produtos}">
+              <tr>
+                <th scope="row">${p.id}</th>
+                <td>${p.nomeDoador}</td>
+                <td>${p.telefone}</td>
+                <td>${p.email}</td>
+                <td>${p.descricao}</td>
+                <td>${p.marca}</td>
+                <td>${p.quantidade}</td>
+                <td>${p.animal}</td>
+                <td>${p.tipo}</td>
+                <td>${p.pacoteFechado}</td>
+                <td>${p.dataDoacao}</td>
+              </tr>
+            </c:forEach>
+          </tbody>
+        </table>
 
-      <a href="inicio.jsp" class="back-btn">← Voltar</a>
-    <% } else { %>
-      <p>Nenhuma doação encontrada!</p>
-      <a href="inicio.jsp" class="back-btn">← Voltar</a>
-    <% } %>
+        <a href="${pageContext.request.contextPath}/Views/inicio.jsp" class="back-btn">← Voltar</a>
+      </c:when>
+
+      <c:otherwise>
+        <p class="p-lista">Nenhuma doação encontrada!</p>
+        <a href="${pageContext.request.contextPath}/Views/inicio.jsp" class="back-btn">← Voltar</a>
+      </c:otherwise>
+    </c:choose>
   </main>
+
 </body>
 </html>

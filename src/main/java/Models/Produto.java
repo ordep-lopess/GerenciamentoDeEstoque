@@ -1,19 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-/**
- *
- * @author pedroH, bianca
- */
-public class Produto implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Produto {
 
     private int id;
     private String nomeDoador;
@@ -21,7 +11,7 @@ public class Produto implements Serializable {
     private String email;
     private String descricao;
     private String marca;
-    private double quantidade;
+    private double quantidade; // em kg
     private String animal;
     private String tipo;
     private String pacoteFechado;
@@ -29,17 +19,9 @@ public class Produto implements Serializable {
 
     public Produto() { }
 
-    public Produto(int id,
-                   String nomeDoador,
-                   String telefone,
-                   String email,
-                   String descricao,
-                   String marca,
-                   double quantidade,
-                   String animal,
-                   String tipo,
-                   String pacoteFechado,
-                   LocalDate dataDoacao) {
+    public Produto(int id, String nomeDoador, String telefone, String email,
+                   String descricao, String marca, double quantidade,
+                   String animal, String tipo, String pacoteFechado, LocalDate dataDoacao) {
         this.id = id;
         this.nomeDoador = nomeDoador;
         this.telefone = telefone;
@@ -53,109 +35,62 @@ public class Produto implements Serializable {
         this.dataDoacao = dataDoacao;
     }
 
-    public int getId() {
-        return id;
+    // getters / setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getNomeDoador() { return nomeDoador; }
+    public void setNomeDoador(String nomeDoador) { this.nomeDoador = nomeDoador; }
+
+    public String getTelefone() { return telefone; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
+
+    public String getMarca() { return marca; }
+    public void setMarca(String marca) { this.marca = marca; }
+
+    public double getQuantidade() { return quantidade; }
+    public void setQuantidade(double quantidade) { this.quantidade = quantidade; }
+
+    public String getAnimal() { return animal; }
+    public void setAnimal(String animal) { this.animal = animal; }
+
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
+
+    public String getPacoteFechado() { return pacoteFechado; }
+    public void setPacoteFechado(String pacoteFechado) { this.pacoteFechado = pacoteFechado; }
+
+    public LocalDate getDataDoacao() { return dataDoacao; }
+    public void setDataDoacao(LocalDate dataDoacao) { this.dataDoacao = dataDoacao; }
+
+    // utilitários para ajuste de quantidade em memória
+    public boolean adjustQuantidade(double delta) {
+        double nova = this.quantidade + delta;
+        if (nova < 0) return false;
+        this.quantidade = nova;
+        return true;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void adicionarQuantidade(double kg) {
+        if (kg < 0) throw new IllegalArgumentException("Quantidade deve ser positiva");
+        adjustQuantidade(kg);
     }
 
-    public String getNomeDoador() {
-        return nomeDoador;
-    }
-
-    public void setNomeDoador(String nomeDoador) {
-        this.nomeDoador = nomeDoador;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
-    public double getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(double quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public String getAnimal() {
-        return animal;
-    }
-
-    public void setAnimal(String animal) {
-        this.animal = animal;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getPacoteFechado() {
-        return pacoteFechado;
-    }
-
-    public void setPacoteFechado(String pacoteFechado) {
-        this.pacoteFechado = pacoteFechado;
-    }
-
-    public LocalDate getDataDoacao() {
-        return dataDoacao;
-    }
-
-    public void setDataDoacao(LocalDate dataDoacao) {
-        this.dataDoacao = dataDoacao;
+    public boolean retirarQuantidade(double kg) {
+        if (kg < 0) throw new IllegalArgumentException("Quantidade deve ser positiva");
+        return adjustQuantidade(-kg);
     }
 
     @Override
     public String toString() {
-        return "Produto{" +
-               "id=" + id +
-               ", nomeDoador='" + nomeDoador + '\'' +
-               ", telefone='" + telefone + '\'' +
-               ", email='" + email + '\'' +
-               ", descricao='" + descricao + '\'' +
-               ", marca='" + marca + '\'' +
-               ", quantidade=" + quantidade +
-               ", animal='" + animal + '\'' +
-               ", tipo='" + tipo + '\'' +
-               ", pacoteFechado='" + pacoteFechado + '\'' +
-               ", dataDoacao=" + dataDoacao +
-               '}';
+        return "Produto{" + "id=" + id + ", descricao='" + descricao + '\'' +
+                ", marca='" + marca + '\'' + ", quantidade=" + quantidade + '}';
     }
 
     @Override

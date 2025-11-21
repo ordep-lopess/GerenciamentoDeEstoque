@@ -20,7 +20,7 @@ public class UsuarioDAO {
         return DriverManager.getConnection(url, "root", "");
     }
 
-    // Persiste o usuário; retorna true se inseriu pelo menos 1 linha
+    // Cadastra o usuário
     public boolean salvar(Login usuario) throws Exception {
         System.out.println("[UsuarioDAO] iniciar salvar() para email=" + usuario.getEmail());
         String sql = "INSERT INTO usuarios "

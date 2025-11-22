@@ -56,7 +56,6 @@ main {
   margin: 1rem;
 }
 
-/* remove margens extras nos itens do grupo */
 .button-group .send-btn,
 .button-group .back-btn {
   margin: 0;

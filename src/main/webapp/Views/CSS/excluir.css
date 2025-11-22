@@ -1,4 +1,3 @@
-/* Container principal */
 main {
   width: 90%;
   margin: 0 auto;
@@ -7,13 +6,11 @@ main {
   flex-direction: column;
 }
 
-/* Wrapper de título */
 .title-wrapper {
   width: 800px;
   margin-bottom: 12px;
 }
 
-/* Título principal */
 .title {
   color: var(--pink);
   font-family: var(--title-font);
@@ -21,7 +18,6 @@ main {
   font-weight: 400;
 }
 
-/* Input */
 .input-wrapper {
   display: flex;
   align-items: center;
@@ -46,7 +42,6 @@ main {
   margin: 2rem;
 }
 
-/* Estilo base de todos os botões */
 .button-group .send-btn,
 .button-group .back-btn,
 .button-group .remove-btn {
@@ -66,10 +61,9 @@ main {
   filter: drop-shadow(3px 3px 0px var(--black));
   transition: background-color 0.2s, font-size 0.2s;
   text-decoration: none;
-  margin: 0;      /* remove margens extras */
+  margin: 0;      
 }
 
-/* Botão Excluir */
 .button-group .remove-btn {
   background-color: var(--red);
 }
@@ -77,7 +71,6 @@ main {
   font-size: 24px;
 }
 
-/* Botão Cancelar / Voltar */
 .button-group .back-btn {
   background-color: #fff;
 }
@@ -86,7 +79,6 @@ main {
   background-color: var(--gray-light);
 }
 
-/* Botão Nova exclusão (reusa send-btn) */
 .button-group .send-btn {
   background-color: var(--yellow);
 }

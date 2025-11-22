@@ -18,7 +18,6 @@
     String nomeUsuario = (usuario != null && usuario.getNome() != null) ? usuario.getNome() : "Visitante";
 %>
 
-  <!-- cabeçalho de usuário -->
   <header class="user-header">
     <span class="greeting">Olá, <%= nomeUsuario %></span>
     <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Sair</a>
@@ -48,7 +47,7 @@
 
       <div class="title-wrapper margin-top"><h2 class="title-label">Descrição do Alimento</h2></div>
       <div class="input-wrapper">
-        <input type="text" name="descricao" placeholder="Ex: Ração Seca 10kg" class="input" required/>
+        <input type="text" name="descricao" placeholder="Insira o nome do produto" class="input" required/>
       </div>
 
       <div class="title-wrapper margin-top"><h2 class="title-label">Marca</h2></div>

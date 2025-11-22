@@ -1,22 +1,22 @@
 .user-header {
   display: flex;
   align-items: center;
-  justify-content: flex-end;    /* empurra para a direita */
-  margin: 24px 20px 12px 0;      /* top, right, bottom, left */
+  justify-content: flex-end;    
+  margin: 24px 20px 12px 0;      
 }
 
 .user-header .greeting {
-  font-size: 1.2rem;             /* um pouco maior */
+  font-size: 1.2rem;             
   color: #333;
-  margin-right: 20px;            /* mais espaço até o botão */
+  margin-right: 20px;            
 }
 
 .logout-btn {
-  font-size: 1rem;               /* texto um pouco maior */
+  font-size: 1rem;               
   color: #c00;
   text-decoration: none;
   border: 1px solid #c00;
-  padding: 6px 12px;             /* botão maior */
+  padding: 6px 12px;             
   border-radius: 4px;
 }
 
@@ -24,3 +24,5 @@
   background: #c00;
   color: #fff;
 }
+
+

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+f<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="models.Login" %>
 <%@ page import="models.Produto" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -20,20 +20,16 @@
     String nomeUsuario = (usuario != null) ? usuario.getNome() : "Visitante";
     Produto produto = (Produto) request.getAttribute("produto");
 %>
-
-  <!-- cabeçalho de usuário -->
   <header class="user-header">
     <span class="greeting">Olá, <%= nomeUsuario %></span>
     <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Sair</a>
   </header>
 
   <main class="main">
-    <%-- mensagem de operação, se existir --%>
     <c:if test="${not empty mensagem}">
       <div class="mensagem"><p>${mensagem}</p></div>
     </c:if>
 
-    <%-- lógica: se produto não foi carregado mostra busca por id (igual ao backup) --%>
     <c:choose>
       <c:when test="${empty produto}">
         <h1 class="title" style="margin-bottom:32px">Buscar Doação por ID</h1>
@@ -125,7 +121,7 @@
           <div class="button-group margin-top">
             <button type="button" class="back-btn" onclick="history.back()">← Voltar</button>
             <button type="submit" class="send-btn">Salvar</button>
-            <a href="${pageContext.request.contextPath}/produto?action=list" class="back-btn">← Início</a>
+            <a href="${pageContext.request.contextPath}/Views/inicio.jsp" class="back-btn">← Início</a>
           </div>
         </form>
       </c:otherwise>

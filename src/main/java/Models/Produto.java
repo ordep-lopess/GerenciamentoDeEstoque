@@ -1,7 +1,16 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package models;
 
 import java.time.LocalDate;
 import java.util.Objects;
+
+/**
+ *
+ * @author pedroH, bianca
+ */
 
 public class Produto {
 
@@ -16,6 +25,9 @@ public class Produto {
     private String tipo;
     private String pacoteFechado;
     private LocalDate dataDoacao;
+
+    // campo adicional mínimo solicitado (não altera lógica existente)
+    private String produtoDescricao;
 
     public Produto() { }
 
@@ -55,7 +67,12 @@ public class Produto {
     public void setMarca(String marca) { this.marca = marca; }
 
     public double getQuantidade() { return quantidade; }
-    public void setQuantidade(double quantidade) { this.quantidade = quantidade; }
+    public void setQuantidade(double quantidade) {
+        if (Double.isNaN(quantidade) || Double.isInfinite(quantidade)) {
+            throw new IllegalArgumentException("Quantidade inválida");
+        }
+        this.quantidade = quantidade;
+    }
 
     public String getAnimal() { return animal; }
     public void setAnimal(String animal) { this.animal = animal; }
@@ -68,6 +85,10 @@ public class Produto {
 
     public LocalDate getDataDoacao() { return dataDoacao; }
     public void setDataDoacao(LocalDate dataDoacao) { this.dataDoacao = dataDoacao; }
+
+    // novo getter/setter mínimo para produtoDescricao
+    public String getProdutoDescricao() { return produtoDescricao; }
+    public void setProdutoDescricao(String produtoDescricao) { this.produtoDescricao = produtoDescricao; }
 
     // utilitários para ajuste de quantidade em memória
     public boolean adjustQuantidade(double delta) {
@@ -89,8 +110,12 @@ public class Produto {
 
     @Override
     public String toString() {
-        return "Produto{" + "id=" + id + ", descricao='" + descricao + '\'' +
-                ", marca='" + marca + '\'' + ", quantidade=" + quantidade + '}';
+        return "Produto{" +
+                "id=" + id +
+                ", descricao='" + descricao + '\'' +
+                ", marca='" + marca + '\'' +
+                ", quantidade=" + quantidade +
+                '}';
     }
 
     @Override

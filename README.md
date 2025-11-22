@@ -53,7 +53,10 @@ CREATE TABLE usuarios ( id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, nome VAR
 
 ## 📨 Como usar
 
-1. **Registrar usuário**  
+1. **Registrar usuário**
+   <div>
+     <img src="https://github.com/ordep-lopess/GerenciamentoDeEstoque/blob/main/img/cadastrarUsuario.png" width="500px"/>
+   </div>
    - Acesse `cadastro.jsp`.  
    - Preencha nome, e-mail, senha, réplica de senha, endereço e CEP.  
    - Envie o formulário; a senha será validada e o e-mail criptografado antes de salvar.

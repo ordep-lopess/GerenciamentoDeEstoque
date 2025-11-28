@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controller;
 
 import dao.ProdutoDAO;
 import models.Produto;
 import models.Login;
 import util.ConectaDB;
+import models.ProdutoObservacao;
+import dao.ProdutoObservacaoDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,11 +16,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-/**
- *
- * @author pedroH, bianca
- */
 
 @WebServlet({"/produto", "/movimentar"})
 public class ProdutoServlet extends HttpServlet {
@@ -53,7 +46,6 @@ public class ProdutoServlet extends HttpServlet {
         try {
             String export = request.getParameter("export");
             String format = request.getParameter("format");
-
             if ("/produto".equalsIgnoreCase(servletPath) && export != null) {
                 if (format == null || format.isBlank()) format = "csv";
                 if (!"csv".equalsIgnoreCase(format)) {
@@ -119,23 +111,36 @@ public class ProdutoServlet extends HttpServlet {
                 break;
 
             case "edit": {
-                String idParam = request.getParameter("id");
-                if (idParam == null || idParam.isBlank()) {
-                    request.getRequestDispatcher("/Views/alterar.jsp").forward(request, response);
-                    return;
-                }
                 try {
-                    int id = Integer.parseInt(idParam.trim());
-                    Produto p = dao.getProdutoById(id);
-                    if (p != null) {
-                        request.setAttribute("produto", p);
+                    String idStr = request.getParameter("id");
+                    // Se não veio id, apenas mostra a página de busca (sem mensagem de erro)
+                    if (idStr == null || idStr.isBlank()) {
                         request.getRequestDispatcher("/Views/alterar.jsp").forward(request, response);
-                    } else {
-                        request.setAttribute("mensagem", "Doação de ID " + id + " não encontrada.");
-                        request.getRequestDispatcher("/Views/alterar.jsp").forward(request, response);
+                        return;
                     }
-                } catch (NumberFormatException e) {
-                    request.setAttribute("mensagem", "ID inválido.");
+
+
+                    int idDoacao = Integer.parseInt(idStr.trim());
+                    Produto produto = dao.getProdutoById(idDoacao);
+
+                    if (produto == null) {
+                        request.setAttribute("mensagem", "Doação não encontrada.");
+                        request.getRequestDispatcher("/Views/alterar.jsp").forward(request, response);
+                        return;
+                    }
+
+                    request.setAttribute("produto", produto);
+
+                    // busca observação
+                    ProdutoObservacaoDAO obsDao = new ProdutoObservacaoDAO();
+                    ProdutoObservacao obs = obsDao.getByProdutoId(idDoacao);
+                    request.setAttribute("observacaoProduto", obs);
+
+                    request.getRequestDispatcher("/Views/alterar.jsp").forward(request, response);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    request.setAttribute("mensagem", "Erro ao carregar doação para edição.");
                     request.getRequestDispatcher("/Views/alterar.jsp").forward(request, response);
                 }
                 break;
@@ -151,7 +156,9 @@ public class ProdutoServlet extends HttpServlet {
                     int id = Integer.parseInt(idStr.trim());
                     Produto p = dao.getProdutoById(id);
                     request.setAttribute("produto", p);
+
                     request.getRequestDispatcher("/Views/excluirProd.jsp").forward(request, response);
+
                 } catch (NumberFormatException e) {
                     response.sendRedirect(request.getContextPath() + "/produto?action=list&msg=invalidid");
                 }
@@ -174,10 +181,26 @@ public class ProdutoServlet extends HttpServlet {
     private void handleProdutoPost(HttpServletRequest request, HttpServletResponse response, String action)
             throws ServletException, IOException {
         switch (action.toLowerCase()) {
+
             case "create": {
+                // monta produto com os campos da tabela principal
                 Produto pCreate = buildProdutoFromRequest(request);
+
+                // pega observação do formulário
+                String obsTexto = safeTrim(request.getParameter("observacao"));
+
                 boolean okCreate = dao.insProduto(pCreate);
+
                 if (okCreate) {
+                    // se cadastrou produto com sucesso e tem observação, salva na tabela secundaria
+                    if (obsTexto != null && !obsTexto.isBlank()) {
+                        ProdutoObservacaoDAO obsDao = new ProdutoObservacaoDAO();
+                        ProdutoObservacao po = new ProdutoObservacao();
+                        po.setIdProduto(pCreate.getId()); // id gerado no insert
+                        po.setObservacao(obsTexto);
+                        obsDao.saveOrUpdate(po);
+                    }
+
                     response.sendRedirect(request.getContextPath() + "/produto?action=list&msg=created");
                 } else {
                     request.setAttribute("mensagem", "Falha ao cadastrar doação.");
@@ -188,11 +211,47 @@ public class ProdutoServlet extends HttpServlet {
 
             case "update": {
                 try {
-                    Produto pUpdate = buildProdutoFromRequest(request);
                     String idS = request.getParameter("id");
-                    pUpdate.setId(Integer.parseInt(idS));
+                    int id = Integer.parseInt(idS);
+
+                    // busca produto existente para preservar campos que não vieram no form
+                    Produto existente = dao.getProdutoById(id);
+
+                    // monta produto a partir do request (pode vir com quantidade vazia)
+                    Produto pUpdate = buildProdutoFromRequest(request);
+
+                    // se o form não enviou quantidade, preserva a atual
+                    String qtdParam = request.getParameter("quantidade");
+                    if (qtdParam == null || qtdParam.isBlank()) {
+                        if (existente != null) {
+                            pUpdate.setQuantidade(existente.getQuantidade());
+                        } else {
+                            pUpdate.setQuantidade(0.0); // fallback seguro
+                        }
+                    } else {
+                        // aceita vírgula como separador decimal
+                        pUpdate.setQuantidade(Double.parseDouble(qtdParam.replace(',', '.')));
+                    }
+
+                    pUpdate.setId(id);
+
+                    // pega observação do formulário
+                    String obsTexto = safeTrim(request.getParameter("observacao"));
+
                     boolean okUpdate = dao.updateProduto(pUpdate);
+
                     if (okUpdate) {
+                        ProdutoObservacaoDAO obsDao = new ProdutoObservacaoDAO();
+
+                        if (obsTexto != null && !obsTexto.isBlank()) {
+                            ProdutoObservacao po = new ProdutoObservacao();
+                            po.setIdProduto(id);
+                            po.setObservacao(obsTexto);
+                            obsDao.saveOrUpdate(po);
+                        } else {
+                            obsDao.deleteByProdutoId(id);
+                        }
+
                         response.sendRedirect(request.getContextPath() + "/produto?action=list&msg=updated");
                     } else {
                         request.setAttribute("mensagem", "Falha ao atualizar doação.");
@@ -233,6 +292,7 @@ public class ProdutoServlet extends HttpServlet {
                         result = "notfound";
                         response.sendRedirect(request.getContextPath() + "/Views/excluirProd.jsp?result=" + result);
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     result = "deletefail";
@@ -245,15 +305,22 @@ public class ProdutoServlet extends HttpServlet {
                 String ident = request.getParameter("id");
                 String mensagem = null;
                 Produto resultado = null;
+                String observacao = null;
+
                 if (ident == null || ident.trim().isEmpty()) {
                     mensagem = "Informe um ID válido.";
                 } else {
                     try {
                         int idConsulta = Integer.parseInt(ident.trim());
                         resultado = dao.getProdutoById(idConsulta);
+
                         if (resultado == null) {
                             mensagem = "Doação não encontrada para o ID " + idConsulta;
+                        } else {
+                            // BUSCAR OBSERVAÇÃO DA DOAÇÃO
+                            observacao = dao.getObservacaoById(idConsulta);
                         }
+
                     } catch (NumberFormatException e) {
                         mensagem = "ID inválido!";
                     } catch (Exception e) {
@@ -261,8 +328,12 @@ public class ProdutoServlet extends HttpServlet {
                         e.printStackTrace();
                     }
                 }
+
+                // ENVIAR TUDO PARA A JSP
                 request.setAttribute("resultado", resultado);
+                request.setAttribute("observacao", observacao);
                 request.setAttribute("mensagem", mensagem);
+
                 request.getRequestDispatcher("/Views/consulta.jsp").forward(request, response);
                 break;
             }
@@ -281,14 +352,14 @@ public class ProdutoServlet extends HttpServlet {
             request.setAttribute("produtos", produtos);
 
             // parâmetros de filtro
-            String mode = request.getParameter("mode"); // "", "date", "type"
+            String mode = request.getParameter("mode"); // ", "date", "type"
             String tipoParam = request.getParameter("tipo"); // entrada/saida
             String from = request.getParameter("from");
             String to = request.getParameter("to");
 
-String sqlBase = "SELECT m.id, m.produto_id, m.tipo, m.quantidade, m.responsavel, m.observacao, m.data_movimentacao, " +
-                    "COALESCE(m.produto_nome, p.descricao) AS produto_descricao " +
-                    "FROM movimentacao m LEFT JOIN produto p ON m.produto_id = p.id ";
+            String sqlBase = "SELECT m.id, m.produto_id, m.tipo, m.quantidade, m.responsavel, m.observacao, m.data_movimentacao, "
+                    + "COALESCE(m.produto_nome, d.descricao) AS produto_descricao "
+                    + "FROM movimentacao m LEFT JOIN doacao d ON m.produto_id = d.id ";
 
             List<String> whereClauses = new ArrayList<>();
             List<Object> sqlParams = new ArrayList<>();
@@ -314,6 +385,7 @@ String sqlBase = "SELECT m.id, m.produto_id, m.tipo, m.quantidade, m.responsavel
 
             try (Connection conn = ConectaDB.conectar();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
+
                 for (int i = 0; i < sqlParams.size(); i++) {
                     Object p = sqlParams.get(i);
                     if (p instanceof java.sql.Date) {
@@ -360,20 +432,23 @@ String sqlBase = "SELECT m.id, m.produto_id, m.tipo, m.quantidade, m.responsavel
             Connection conn = null;
             try {
                 conn = ConectaDB.conectar();
+                if (conn == null) throw new SQLException("Conexão nula");
                 conn.setAutoCommit(false);
 
-                String sqlUpdate = "UPDATE produto SET quantidade = quantidade + ? WHERE id = ?";
+                String sqlUpdate = "UPDATE doacao SET quantidade = quantidade + ? WHERE id = ?";
+
                 try (PreparedStatement ps = conn.prepareStatement(sqlUpdate)) {
                     double delta = "entrada".equalsIgnoreCase(tipo) ? quantidade : -quantidade;
                     ps.setDouble(1, delta);
                     ps.setInt(2, produtoId);
                     int updated = ps.executeUpdate();
                     if (updated != 1) {
-                        throw new SQLException("Produto não encontrado ou atualização falhou (id=" + produtoId + ")");
+                        throw new SQLException("Doação não encontrada ou atualização falhou (id=" + produtoId + ")");
                     }
                 }
 
                 String sqlIns = "INSERT INTO movimentacao (produto_id, tipo, quantidade, responsavel, observacao, data_movimentacao) VALUES (?, ?, ?, ?, ?, ?)";
+
                 try (PreparedStatement ps2 = conn.prepareStatement(sqlIns, Statement.RETURN_GENERATED_KEYS)) {
                     ps2.setInt(1, produtoId);
                     ps2.setString(2, tipo);
@@ -392,11 +467,7 @@ String sqlBase = "SELECT m.id, m.produto_id, m.tipo, m.quantidade, m.responsavel
                 return;
             } catch (Exception e) {
                 if (conn != null) {
-                    try {
-                        conn.rollback();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                    try { conn.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
                 }
                 throw new ServletException(e);
             } finally {
@@ -404,9 +475,7 @@ String sqlBase = "SELECT m.id, m.produto_id, m.tipo, m.quantidade, m.responsavel
                     try {
                         conn.setAutoCommit(true);
                         conn.close();
-                    } catch (Exception ignore) {
-                        // ignore
-                    }
+                    } catch (Exception ignore) { /* ignore */ }
                 }
             }
         }
@@ -443,13 +512,15 @@ String sqlBase = "SELECT m.id, m.produto_id, m.tipo, m.quantidade, m.responsavel
     }
 
     private void handleExportProdutosCsv(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String sql = "SELECT id, nome_doador, telefone, email, descricao, marca, quantidade, animal, tipo, pacote_fechado, data_doacao FROM produto ORDER BY id";
+        String sql = "SELECT id, nome_doador, telefone, email, descricao, marca, quantidade, animal, tipo, pacote_fechado, data_doacao FROM doacao ORDER BY id";
 
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/csv; charset=UTF-8");
         String filename = "produtos.csv";
         String requestedFilename = req.getParameter("filename");
+
         if (requestedFilename != null && !requestedFilename.isBlank()) filename = requestedFilename;
+
         resp.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 
         try (PrintWriter out = resp.getWriter();
@@ -458,6 +529,7 @@ String sqlBase = "SELECT m.id, m.produto_id, m.tipo, m.quantidade, m.responsavel
              ResultSet rs = ps.executeQuery()) {
 
             out.println("id;nome_doador;telefone;email;descricao;marca;quantidade;animal;tipo;pacote_fechado;data_doacao");
+
             DateTimeFormatter df = DateTimeFormatter.ISO_LOCAL_DATE;
 
             while (rs.next()) {
@@ -487,8 +559,8 @@ String sqlBase = "SELECT m.id, m.produto_id, m.tipo, m.quantidade, m.responsavel
         String from = req.getParameter("from");
         String to = req.getParameter("to");
 
-String sqlBase = "SELECT m.id, m.produto_id, COALESCE(m.produto_nome, p.descricao) AS produto_descricao, m.tipo, m.quantidade, m.responsavel, m.observacao, m.data_movimentacao, m.created_at " +
-                "FROM movimentacao m LEFT JOIN produto p ON m.produto_id = p.id ";
+        String sqlBase = "SELECT m.id, m.produto_id, COALESCE(m.produto_nome, d.descricao) AS produto_descricao, m.tipo, m.quantidade, m.responsavel, m.observacao, m.data_movimentacao, m.created_at "
+                + "FROM movimentacao m LEFT JOIN doacao d ON m.produto_id = d.id ";
 
         List<String> whereClauses = new ArrayList<>();
         List<Object> params = new ArrayList<>();
@@ -514,7 +586,9 @@ String sqlBase = "SELECT m.id, m.produto_id, COALESCE(m.produto_nome, p.descrica
         resp.setContentType("text/csv; charset=UTF-8");
         String filename = "movimentacoes.csv";
         String requestedFilename = req.getParameter("filename");
+
         if (requestedFilename != null && !requestedFilename.isBlank()) filename = requestedFilename;
+
         resp.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 
         try (PrintWriter out = resp.getWriter();
@@ -532,6 +606,7 @@ String sqlBase = "SELECT m.id, m.produto_id, COALESCE(m.produto_nome, p.descrica
 
             try (ResultSet rs = ps.executeQuery()) {
                 out.println("id;produto_id;produto_descricao;tipo;quantidade;responsavel;observacao;data_movimentacao;created_at");
+
                 DateTimeFormatter df = DateTimeFormatter.ISO_LOCAL_DATE;
                 while (rs.next()) {
                     int id = rs.getInt("id");
@@ -558,6 +633,6 @@ String sqlBase = "SELECT m.id, m.produto_id, COALESCE(m.produto_nome, p.descrica
 
     private String sanitizeCsv(String s) {
         if (s == null) return "";
-        return s.replace("\r", " ").replace("\n", " ").replace(";", ",").replace("\\", "");
+        return s.replace("\r", " ").replace("\n", " ").replace(";", ",").replace("\"", "");
     }
 }

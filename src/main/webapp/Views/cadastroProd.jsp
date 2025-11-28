@@ -1,25 +1,30 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="models.Login" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastrar Doação</title>
+  
   <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/reset.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/index.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/voltar.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/alterar.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/header.css"/>
+  
 </head>
 <body>
-<%
-    Login usuario = (Login) session.getAttribute("usuario");
-    String nomeUsuario = (usuario != null && usuario.getNome() != null) ? usuario.getNome() : "Visitante";
-%>
-
-  <header class="user-header">
-    <span class="greeting">Olá, <%= nomeUsuario %></span>
+   <header class="user-header">
+    <span class="greeting">
+      Olá,
+      <c:choose>
+        <c:when test="${not empty sessionScope.usuario and not empty sessionScope.usuario.nome}">
+          <c:out value="${sessionScope.usuario.nome}" />
+        </c:when>
+        <c:otherwise>Visitante</c:otherwise>
+      </c:choose>
+    </span>
     <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Sair</a>
   </header>
 
@@ -44,10 +49,10 @@
       <div class="input-wrapper">
         <input type="email" name="email" placeholder="exemplo@dominio.com" class="input" required/>
       </div>
-
+      
       <div class="title-wrapper margin-top"><h2 class="title-label">Descrição do Alimento</h2></div>
       <div class="input-wrapper">
-        <input type="text" name="descricao" placeholder="Insira o nome do produto" class="input" required/>
+        <input type="text" name="descricao" placeholder="Ex: Ração Seca" class="input" required/>
       </div>
 
       <div class="title-wrapper margin-top"><h2 class="title-label">Marca</h2></div>
@@ -93,7 +98,14 @@
       <div class="input-wrapper">
         <input type="date" name="dataDoacao" class="input" required/>
       </div>
+      
+      <div class="title-wrapper margin-top"><h2 class="title-label">Observação</h2></div>
+      <div class="input-wrapper">
+          <input type="text" name="observacao" class="input" rows="3"
+              placeholder="Digite alguma observação sobre a doação (opcional)"></input>
+      </div>
 
+      
       <div class="button-group margin-top">
         <button type="button" class="back-btn" onclick="history.back()">← Voltar</button>
         <button type="submit" class="send-btn">Enviar</button>

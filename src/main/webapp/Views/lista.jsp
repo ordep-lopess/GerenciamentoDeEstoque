@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="models.Login" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -16,23 +15,21 @@
 
 </head>
 <body>
-
-<%
-    Login usuario = (Login) session.getAttribute("usuario");
-    String nome = (usuario != null && usuario.getNome() != null) ? usuario.getNome() : "Visitante";
-%>
-
-<header class="user-header">
-  <span class="greeting">Olá, <%= nome %></span>
-  <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Sair</a>
-</header>
-
+ <header class="user-header">
+    <span class="greeting">
+      Olá,
+      <c:choose>
+        <c:when test="${not empty sessionScope.usuario and not empty sessionScope.usuario.nome}">
+          <c:out value="${sessionScope.usuario.nome}" />
+        </c:when>
+        <c:otherwise>Visitante</c:otherwise>
+      </c:choose>
+    </span>
+    <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Sair</a>
+  </header>
+<br>
 <h1 class="title" style="margin-bottom:20px; text-align:center;">Lista de Doações</h1>
-
 <div class="top-actions">
-  <div class="top-left">
-    <span class="export-note">Exporta todos os produtos em CSV</span>
-  </div>
 
   <div class="top-right">
     <a id="exportProdutosFallback" class="btn-export" href="${pageContext.request.contextPath}/produto?export=produtos&format=csv" title="Exportar Produtos CSV" role="button">
@@ -68,7 +65,6 @@
             <th scope="col">Nome Doador</th>
             <th scope="col">Telefone</th>
             <th scope="col">E-mail</th>
-            <th scope="col">Produto</th>
             <th scope="col">Marca</th>
             <th scope="col">Quantidade (kg)</th>
             <th scope="col">Animal</th>
@@ -84,7 +80,6 @@
               <td><c:out value="${p.nomeDoador}"/></td>
               <td><c:out value="${p.telefone}"/></td>
               <td><c:out value="${p.email}"/></td>
-              <td><c:out value="${p.descricao}"/></td>
               <td><c:out value="${p.marca}"/></td>
               <td><c:out value="${p.quantidade}"/></td>
               <td><c:out value="${p.animal}"/></td>

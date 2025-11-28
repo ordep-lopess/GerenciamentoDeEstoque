@@ -1,5 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="models.Login" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -13,17 +12,21 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/excluir.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/voltar.css"/>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/Views/CSS/header.css"/>
+  
 </head>
 <body>
-<%
-  Login usuario = (Login) session.getAttribute("usuario");
-  String nome = (usuario != null && usuario.getNome() != null) ? usuario.getNome() : "Visitante";
-%>
-
-<header class="user-header">
-  <span class="greeting">Olá, <%= nome %></span>
-  <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Sair</a>
-</header>
+   <header class="user-header">
+    <span class="greeting">
+      Olá,
+      <c:choose>
+        <c:when test="${not empty sessionScope.usuario and not empty sessionScope.usuario.nome}">
+          <c:out value="${sessionScope.usuario.nome}" />
+        </c:when>
+        <c:otherwise>Visitante</c:otherwise>
+      </c:choose>
+    </span>
+    <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Sair</a>
+  </header>
 
 <main class="main">
   <c:url var="produtoUrl" value="/produto"/>
